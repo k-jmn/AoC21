@@ -3,11 +3,14 @@ parseinput() = hcat(map.(digit2int, split.(replace.(readlines()," | "=>" ")))...
 digit2int(str) = sum(map(x -> 2 ^ (x-'a'), collect(str)))
 
 function decode(vec)
+    # known digits based on segment count`
     unamb = [-1,1,7,4,-1,-1,8]
+    # 7 bit digit code to value mapping
+    digit = zeros(UInt8, 127)
+    # inverse of the above
+    digitinv = zeros(UInt8, 10)
     unid = []
     sizehint!(unid, 6)
-    digit = zeros(UInt8, 127)
-    digitinv = zeros(UInt8, 10)
     for x in vec[1:end-4]
 	maybeval = unamb[count_ones(x)]
 	if maybeval ≠ -1
